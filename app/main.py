@@ -17,3 +17,4 @@ app = FastAPI()
 def root():
     logger.info("Root endpoint called")
     return {"message": "SQL AI Generator is running 🚀"}
+
