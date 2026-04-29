@@ -223,3 +223,7 @@ setup.py
 venv/
 __pycache__/
 *.db
+
+1_code.txt
+2_project_structure.txt
+code_Save.py

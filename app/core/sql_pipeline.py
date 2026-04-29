@@ -15,10 +15,13 @@ def run_pipeline(user_query: str):
 
     # Step 3: Generate SQL
     sql = generate_response(prompt)
+    sql = sql.strip().replace("```sql", "").replace("```", "").strip()
     print("\nGenerated SQL:\n", sql)
 
     # Step 4: Validate SQL
     validate_sql(sql)
+
+    print("\nGenerated SQL:\n", sql)
 
     # Step 5: Execute SQL
     result = execute_sql(sql)

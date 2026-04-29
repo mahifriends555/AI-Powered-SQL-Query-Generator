@@ -11,6 +11,9 @@ Rules:
 - Do not invent columns or tables
 - Generate only SQL (no explanation)
 - Use proper SQL syntax
+- Use proper JOINs when data is in multiple tables
+- Use foreign key relationships correctly
+- If aggregation is needed, use GROUP BY
 
 User Query:
 {user_query}
