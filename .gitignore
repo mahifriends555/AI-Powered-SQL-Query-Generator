@@ -219,3 +219,7 @@ __marimo__/
 
 setup.py
 
+.env
+venv/
+__pycache__/
+*.db
