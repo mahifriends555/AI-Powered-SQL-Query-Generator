@@ -4,6 +4,7 @@ from app.core.llm import generate_response
 from app.db.schema import get_schema
 from app.db.executor import execute_sql
 from app.safety.validator import validate_sql
+import json
 
 
 def run_pipeline(user_query: str):
@@ -14,9 +15,20 @@ def run_pipeline(user_query: str):
     prompt = build_prompt(user_query, schema)
 
     # Step 3: Generate SQL
-    sql = generate_response(prompt)
-    sql = sql.strip().replace("```sql", "").replace("```", "").strip()
-    print("\nGenerated SQL:\n", sql)
+    response = generate_response(prompt)
+
+    # Clean markdown if exists
+    response = response.strip().replace("```json", "").replace("```", "").strip()
+
+    try:
+        parsed = json.loads(response)
+    except Exception as e:
+        return {
+            "error": "Invalid JSON from LLM",
+            "raw_output": response
+        }
+
+    sql = parsed.get("sql")
 
     # Step 4: Validate SQL
     validate_sql(sql)
@@ -26,4 +38,11 @@ def run_pipeline(user_query: str):
     # Step 5: Execute SQL
     result = execute_sql(sql)
 
-    return result
+    return {
+    "sql": sql,
+    "result": result,
+    "explanation": parsed.get("explanation"),
+    "breakdown": parsed.get("breakdown"),
+    "tables_used": parsed.get("tables_used"),
+    "tip": parsed.get("tip")
+    }

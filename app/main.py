@@ -1,9 +1,11 @@
 
+from urllib import request
 
 from fastapi import FastAPI
 from dotenv import load_dotenv
 import os
 from app.core.sql_pipeline import run_pipeline
+from app.models import QueryRequest, QueryResponse
 
 from app.utils.logger import get_logger
 
@@ -20,9 +22,9 @@ def root():
     return {"message": "SQL AI Generator is running 🚀"}
 
 
-@app.get("/query")
-def query(q: str):
-    result = run_pipeline(q)
-    return {"result": result}
+@app.post("/query")
+def query(request: QueryRequest):
+    result = run_pipeline(request.query)
+    return result
 
 
